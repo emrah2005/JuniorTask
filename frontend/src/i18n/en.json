@@ -1,0 +1,364 @@
+{
+  "navbar": {
+    "brand": "Digitermin",
+    "login": "Sign in",
+    "getStarted": "Get started",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "languages": {
+      "mk": "MK",
+      "en": "EN",
+      "al": "AL"
+    }
+  },
+  "landing": {
+    "topBanner": {
+      "new": "New",
+      "text": "14-day free trial — No credit card required"
+    },
+    "hero": {
+      "title": "Simplify bookings, delight customers, and grow your business",
+      "subtitle": "The most intuitive scheduling platform for service professionals. Everything you need to run your business in one place.",
+      "ctaStart": "Start free",
+      "ctaHowItWorks": "See how it works"
+    },
+    "stats": {
+      "activeBusinesses": "Active businesses",
+      "hoursSavedMonthly": "Hours saved monthly",
+      "availability": "Availability"
+    },
+    "features": {
+      "title": "Features",
+      "subtitle": "Everything you need to run your business",
+      "items": {
+        "schedule": {
+          "title": "Easy scheduling",
+          "desc": "Interactive calendar with day, week, and month views. Book appointments in a few clicks."
+        },
+        "clients": {
+          "title": "Client management",
+          "desc": "Complete client profiles with booking history, spend analytics, and personal notes."
+        },
+        "analytics": {
+          "title": "Analytics and insights",
+          "desc": "Real-time dashboard tracking revenue, booking trends, and staff performance metrics."
+        },
+        "sms": {
+          "title": "SMS reminders",
+          "desc": "Automated notifications to reduce no-shows by up to 80%. Customizable message templates."
+        },
+        "online": {
+          "title": "Online bookings",
+          "desc": "Let clients book 24/7 via your personalized booking page."
+        },
+        "roles": {
+          "title": "Role-based access",
+          "desc": "Secure permissions for admins and staff. Control who can view, edit, or manage appointments."
+        }
+      }
+    },
+    "productTour": {
+      "label": "Product tour",
+      "title": "A beautifully designed platform that makes scheduling effortless",
+      "bullets": {
+        "drag": "Drag-and-drop rescheduling with an intuitive calendar.",
+        "speed": "Optimized performance means no waiting while you work.",
+        "mobile": "Manage your business from anywhere with our responsive design."
+      }
+    },
+    "pricing": {
+      "label": "Pricing",
+      "title": "Simple, transparent pricing",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "Save ~8%",
+      "plans": {
+        "basic": "Basic",
+        "premium": "Premium",
+        "ultimate": "Ultimate",
+        "popular": "Most popular",
+        "btnBasic": "Start Basic",
+        "btnPremium": "Start Premium",
+        "btnUltimate": "Start Ultimate",
+        "features": {
+          "unlimitedBookings": "Unlimited bookings",
+          "oneEmployee": "1 employee",
+          "recurring": "Recurring bookings",
+          "clients": "Client management",
+          "basicNotifications": "Basic notifications",
+          "unlimitedEmployees": "Unlimited employees",
+          "sms": "SMS reminders",
+          "online": "Online bookings",
+          "advancedAnalytics": "Advanced analytics",
+          "ownDomain": "Own domain",
+          "vipSupport": "VIP support 24/7",
+          "personalTraining": "Personalized training",
+          "apiAccess": "API access"
+        }
+      }
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "Frequently asked questions",
+      "q1": "Is there a free trial?",
+      "a1": "Yes! You can use Digitermin free for 14 days with no credit card. After, choose a plan that suits you.",
+      "q2": "Can I cancel my plan anytime?",
+      "a2": "Absolutely. No binding contracts. Upgrade, downgrade, or cancel anytime from your dashboard.",
+      "q3": "Are my data secure?",
+      "a3": "Your data security is our top priority. We use bank-level encryption and regular backups.",
+      "q4": "Do you offer setup support?",
+      "a4": "Yes, our team can help you get started with free consultation and onboarding support."
+    },
+    "finalCta": {
+      "title": "Ready to transform your business?",
+      "subtitle": "Join 50+ businesses already using Digitermin to improve their services.",
+      "button": "Start free now",
+      "note": "No credit card. 14 days free."
+    },
+    "footer": {
+      "links": ["Features", "Pricing", "Support", "Terms", "Privacy"],
+      "copyright": "© 2026 Digitermin. All rights reserved."
+    }
+  },
+  "sidebar": {
+    "items": {
+      "dashboard": "Dashboard",
+      "businesses": "Businesses",
+      "services": "Services",
+      "bookings": "Bookings",
+      "analytics": "Analytics",
+      "users": "Users",
+      "groups": "Groups",
+      "attendance": "Attendance"
+    },
+    "signOut": "Sign out"
+  },
+  "calendar": {
+    "today": "Today",
+    "back": "Back",
+    "next": "Next",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "agenda": "Agenda",
+    "bookingDetails": "Booking Details",
+    "monthNames": ["January","February","March","April","May","June","July","August","September","October","November","December"]
+  },
+  "userDashboard": {
+    "title": "User Dashboard",
+    "subtitle": "Browse businesses and book appointments",
+    "availableBusinesses": "Available Businesses",
+    "bookAppointment": "Book Appointment",
+    "noBusinesses": "No businesses available at the moment.",
+    "myBookings": "My Bookings",
+    "noBookings": "You haven't made any bookings yet.",
+    "cancel": "Cancel",
+    "selectBusiness": "Select Business",
+    "chooseBusiness": "Choose a business",
+    "selectService": "Select Service",
+    "chooseService": "Choose a service",
+    "date": "Date",
+    "time": "Time",
+    "bookNow": "Book Now"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "or": "Or",
+      "createAccount": "create a new account",
+      "remember": "Remember me",
+      "forgot": "Forgot your password?",
+      "submit": "Sign in",
+      "orProviders": "Or continue with"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Join Digitermin in seconds",
+      "haveAccount": "Already have an account?",
+      "signInHere": "Sign in here",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "roleLabel": "Account Type",
+      "roleUser": "Client",
+      "roleAdmin": "Business",
+      "submit": "Create Account",
+      "terms": "By joining, you agree to our Terms of Service and Privacy Policy."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "name": "Full Name"
+    },
+    "placeholders": {
+      "email": "you@example.com",
+      "password": "••••••••",
+      "name": "John Doe"
+    },
+    "providers": {
+      "google": "Sign in with Google",
+      "microsoft": "Sign in with Microsoft"
+    },
+    "test": {
+      "title": "Test Accounts:",
+      "superadmin": "SuperAdmin:",
+      "admin": "Admin:",
+      "user": "User:",
+      "passwords": "Password: super123 / admin123 / user123"
+    }
+  },
+  "superAdmin": {
+    "dashboardError": "Dashboard Error",
+    "revenueGrowth": "Revenue Growth",
+    "monthlyRevenueTrends": "Monthly revenue trends",
+    "totalLifetime": "Total Lifetime",
+    "bookingVolume": "Booking Volume",
+    "monthlyBookingActivity": "Monthly booking activity",
+    "noRevenueData": "No revenue data available",
+    "noBookingData": "No booking data available",
+    "systemBusinesses": "System Businesses",
+    "totalLabel": "Total",
+    "latest20Bookings": "Latest 20 Bookings",
+    "noBookingsFound": "No bookings found in the system"
+  },
+  "admin": {
+    "businessType": "Business Type",
+    "servicesOffered": "Services Offered",
+    "price": "Price",
+    "min": "Min",
+    "dashboardTitle": "Admin Dashboard",
+    "dashboardSubtitle": "Manage your businesses and bookings",
+    "businessName": "Business Name",
+    "businessNamePlaceholder": "e.g. Master Cuts",
+    "serviceNamePlaceholder": "Service Name (e.g. Haircut)",
+    "type": {
+      "barber": "Barber",
+      "gym": "Gym",
+      "trainingHall": "Training Hall",
+      "carWash": "Car Wash"
+    },
+    "calendar": {
+      "title": "Booking Calendar",
+      "selectBusiness": "Select a business to view calendar"
+    },
+    "pending": {
+      "title": "Pending Bookings",
+      "empty": "No pending bookings",
+      "processed": "All bookings have been processed",
+      "customer": "Customer",
+      "business": "Business",
+      "date": "Date",
+      "time": "Time",
+      "price": "Price",
+      "accept": "Accept",
+      "reject": "Reject"
+    },
+    "selector": {
+      "title": "Select Business",
+      "choose": "Choose a business"
+    },
+    "businessList": {
+      "title": "Your Businesses",
+      "empty": "No businesses yet."
+    },
+    "stats": {
+      "totalRevenue": "Total Revenue",
+      "monthlyRevenue": "Monthly Revenue",
+      "totalBookings": "Total Bookings",
+      "accepted": "Accepted",
+      "pending": "Pending",
+      "today": "Bookings Today",
+      "thisMonth": "This Month"
+    },
+    "charts": {
+      "monthlyRevenueTitle": "Monthly Revenue",
+      "realTime": "Real-time",
+      "serviceShareTitle": "Service Share",
+      "byRevenue": "By Revenue",
+      "bookingVolumeTitle": "Booking Volume",
+      "trends": "Trends",
+      "revenue": "Revenue",
+      "bookings": "Bookings",
+      "noRevenue": "No revenue data",
+      "acceptBookings": "Accept bookings to see trends",
+      "noService": "No service data",
+      "completeBookings": "Complete bookings to see performance",
+      "noBookingTrends": "No booking trends",
+      "moreData": "More data needed for analysis"
+    }
+  }
+  ,
+  "tablet": {
+    "title": "Coach Tablet",
+    "group": "Group",
+    "chooseGroup": "Choose group",
+    "session": "Session time",
+    "noMembers": "No active members",
+    "save": "Save attendance",
+    "success": "Attendance saved",
+    "selectAll": "Select all",
+    "historyTitle": "Attendance by date",
+    "historyDate": "Date",
+    "historyShow": "Show",
+    "historyEmpty": "No attendees for selected date"
+  },
+  "checkin": {
+    "title": "Self Check-in",
+    "group": "Group",
+    "chooseGroup": "Choose group",
+    "session": "Session time",
+    "submit": "I'm present",
+    "success": "Checked in successfully",
+    "note": "Self check-in is allowed shortly before/after session start"
+  },
+  "groups": {
+    "title": "Groups & Memberships",
+    "create": "Create group",
+    "name": "Group name",
+    "hall": "Hall (opt.)",
+    "day": "Weekday (opt.)",
+    "time": "Time HH:MM (opt.)",
+    "price": "Price (opt.)",
+    "createBtn": "Create",
+    "members": "Group members",
+    "choose": "Choose group",
+    "userId": "User ID",
+    "validTo": "Valid to (opt.)",
+    "addMember": "Add to group",
+    "noMembers": "No members",
+    "created": "Group created",
+    "memberAdded": "Member added to group",
+    "edit": "Edit group",
+    "updateBtn": "Update",
+    "updated": "Group updated"
+  }
+  ,
+  "tablet": {
+    "salaGroups": "Group Hall"
+  }
+  ,
+  "attendance": {
+    "title": "Attendance",
+    "group": "Group",
+    "allGroups": "All groups",
+    "from": "From",
+    "to": "To",
+    "refresh": "Refresh",
+    "summary": "Summary by day",
+    "details": "Details",
+    "dateTime": "Date/Time",
+    "user": "User",
+    "groupCol": "Group",
+    "source": "Source",
+    "empty": "No data"
+  }
+  ,
+  "users": {
+    "title": "Users",
+    "create": "Create user",
+    "list": "User list",
+    "created": "User created",
+    "noAccess": "Only SuperAdmin can view the list",
+    "empty": "No users"
+  }
+}

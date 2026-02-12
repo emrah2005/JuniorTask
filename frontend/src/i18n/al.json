@@ -1,0 +1,325 @@
+{
+  "navbar": {
+    "brand": "Digitermin",
+    "login": "Hyr",
+    "getStarted": "Fillo falas",
+    "dashboard": "Paneli",
+    "logout": "Dil",
+    "languages": {
+      "mk": "MK",
+      "en": "EN",
+      "al": "AL"
+    }
+  },
+  "landing": {
+    "topBanner": {
+      "new": "E re",
+      "text": "Provim falas 14-ditor — Nuk kërkohet kartë krediti"
+    },
+    "hero": {
+      "title": "Thjeshtoni rezervimet, kënaqni klientët dhe rritni biznesin",
+      "subtitle": "Platforma më intuitive e orarit për profesionistët e shërbimeve. Gjithçka që ju duhet në një vend.",
+      "ctaStart": "Fillo falas",
+      "ctaHowItWorks": "Shiko si funksionon"
+    },
+    "stats": {
+      "activeBusinesses": "Biznese aktive",
+      "hoursSavedMonthly": "Orë të kursyera në muaj",
+      "availability": "Disponueshmëri"
+    },
+    "features": {
+      "title": "Funksione",
+      "subtitle": "Gjithçka që ju duhet për biznesin",
+      "items": {
+        "schedule": {
+          "title": "Orar i lehtë",
+          "desc": "Kalendar interaktiv me pamje ditore, javore dhe mujore. Rezervime me disa klikime."
+        },
+        "clients": {
+          "title": "Menaxhim klientësh",
+          "desc": "Profile të plota klientësh me histori rezervimesh, analiza shpenzimesh dhe shënime personale."
+        },
+        "analytics": {
+          "title": "Analiza dhe njohuri",
+          "desc": "Panel në kohë reale që ndjek të ardhurat, tendencat e rezervimeve dhe performancën e stafit."
+        },
+        "sms": {
+          "title": "Kujtues SMS",
+          "desc": "Njoftime të automatizuara për të ulur mungesat deri në 80%. Shabllone të personalizueshme."
+        },
+        "online": {
+          "title": "Rezervime online",
+          "desc": "Lejoni klientët të rezervojnë 24/7 përmes faqes suaj të rezervimit."
+        },
+        "roles": {
+          "title": "Akses me role",
+          "desc": "Leje të sigurta për administratorë dhe staf. Kontrolloni kush sheh, ndryshon ose menaxhon."
+        }
+      }
+    },
+    "productTour": {
+      "label": "Prezantimi i produktit",
+      "title": "Një platformë e bukur që e bën orarin pa mundim",
+      "bullets": {
+        "drag": "Riorganizim me tërheqje në kalendarin intuitiv.",
+        "speed": "Performancë e optimizuar pa pritje gjatë punës.",
+        "mobile": "Menaxhoni biznesin nga kudo me dizajnin tonë responsiv."
+      }
+    },
+    "pricing": {
+      "label": "Çmimet",
+      "title": "Çmime të thjeshta dhe të qarta",
+      "monthly": "Mujore",
+      "yearly": "Vjetore",
+      "save": "Kurset ~8%",
+      "plans": {
+        "basic": "Bazë",
+        "premium": "Premium",
+        "ultimate": "Ultimate",
+        "popular": "Më i popullarizuar",
+        "btnBasic": "Fillo Bazë",
+        "btnPremium": "Fillo Premium",
+        "btnUltimate": "Fillo Ultimate",
+        "features": {
+          "unlimitedBookings": "Rezervime pa kufi",
+          "oneEmployee": "1 punonjës",
+          "recurring": "Rezervime të përsëritura",
+          "clients": "Menaxhim klientësh",
+          "basicNotifications": "Njoftime bazë",
+          "unlimitedEmployees": "Punonjës pa kufi",
+          "sms": "Kujtues SMS",
+          "online": "Rezervime online",
+          "advancedAnalytics": "Analiza të avancuara",
+          "ownDomain": "Domen personal",
+          "vipSupport": "Mbështetje VIP 24/7",
+          "personalTraining": "Trajnim i personalizuar",
+          "apiAccess": "Qasje në API"
+        }
+      }
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "Pyetje të shpeshta",
+      "q1": "A ka provë falas?",
+      "a1": "Po! Mund ta përdorni Digitermin falas për 14 ditë pa kartë krediti. Pas kësaj, zgjidhni planin që ju përshtatet.",
+      "q2": "A mund ta anulloj planin në çdo kohë?",
+      "a2": "Sigurisht. Pa kontrata detyruese. Përmirësoni, ulni ose anuloni në çdo kohë nga paneli juaj.",
+      "q3": "A janë të sigurta të dhënat e mia?",
+      "a3": "Siguria e të dhënave tuaja është prioriteti ynë. Përdorim enkriptim në nivel banke dhe kopje rezervë të rregullta.",
+      "q4": "A ofroni ndihmë për konfigurim?",
+      "a4": "Po, ekipi ynë ju ndihmon të filloni me konsultim falas dhe mbështetje."
+    },
+    "finalCta": {
+      "title": "Gati për të transformuar biznesin tuaj?",
+      "subtitle": "Bashkohuni me 50+ biznese që tashmë përdorin Digitermin për të përmirësuar shërbimet e tyre.",
+      "button": "Fillo falas tani",
+      "note": "Pa kartë krediti. 14 ditë falas."
+    },
+    "footer": {
+      "links": ["Funksione", "Çmimet", "Mbështetje", "Kushtet", "Privatësia"],
+      "copyright": "© 2026 Digitermin. Të gjitha të drejtat e rezervuara."
+    }
+  },
+  "sidebar": {
+    "items": {
+      "dashboard": "Paneli",
+      "businesses": "Biznese",
+      "services": "Shërbime",
+      "bookings": "Rezervime",
+      "analytics": "Analiza",
+      "users": "Përdorues",
+      "groups": "Grupet"
+    },
+    "signOut": "Dil"
+  },
+  "calendar": {
+    "today": "Sot",
+    "back": "Prapa",
+    "next": "Tjetra",
+    "month": "Muaj",
+    "week": "Javë",
+    "day": "Ditë",
+    "agenda": "Agjendë",
+    "bookingDetails": "Detajet e rezervimit",
+    "monthNames": ["Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"]
+  },
+  "userDashboard": {
+    "title": "Paneli i përdoruesit",
+    "subtitle": "Shfletoni biznese dhe rezervoni takime",
+    "availableBusinesses": "Biznese të disponueshme",
+    "bookAppointment": "Rezervo takim",
+    "noBusinesses": "Nuk ka biznese të disponueshme për momentin.",
+    "myBookings": "Rezervimet e mia",
+    "noBookings": "Nuk keni bërë ende rezervime.",
+    "cancel": "Anulo",
+    "selectBusiness": "Zgjidh biznesin",
+    "chooseBusiness": "Zgjidh një biznes",
+    "selectService": "Zgjidh shërbimin",
+    "chooseService": "Zgjidh një shërbim",
+    "date": "Data",
+    "time": "Koha",
+    "bookNow": "Rezervo tani"
+  },
+  "auth": {
+    "login": {
+      "title": "Hyni në llogarinë tuaj",
+      "or": "Ose",
+      "createAccount": "krijoni një llogari të re",
+      "remember": "Më mbaj mend",
+      "forgot": "Keni harruar fjalëkalimin?",
+      "submit": "Hyr",
+      "orProviders": "Ose vazhdoni me"
+    },
+    "register": {
+      "title": "Krijoni llogarinë tuaj",
+      "subtitle": "Bashkohuni me Digitermin brenda sekondave",
+      "haveAccount": "Keni tashmë një llogari?",
+      "signInHere": "Hyni këtu",
+      "fullName": "Emër i plotë",
+      "email": "Adresë email",
+      "password": "Fjalëkalim",
+      "roleLabel": "Lloji i llogarisë",
+      "roleUser": "Klient",
+      "roleAdmin": "Biznes",
+      "submit": "Krijo Llogari",
+      "terms": "Duke u bashkuar, pranoni Kushtet e Shërbimit dhe Politikën e Privatësisë."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Fjalëkalim",
+      "name": "Emër i plotë"
+    },
+    "placeholders": {
+      "email": "ju@example.com",
+      "password": "••••••••",
+      "name": "John Doe"
+    },
+    "providers": {
+      "google": "Hyr me Google",
+      "microsoft": "Hyr me Microsoft"
+    },
+    "test": {
+      "title": "Llogari testuese:",
+      "superadmin": "SuperAdmin:",
+      "admin": "Admin:",
+      "user": "User:",
+      "passwords": "Fjalëkalimet: super123 / admin123 / user123"
+    }
+  },
+  "superAdmin": {
+    "dashboardError": "Gabim në panel",
+    "revenueGrowth": "Rritja e të ardhurave",
+    "monthlyRevenueTrends": "Tendencat mujore të të ardhurave",
+    "totalLifetime": "Total i përgjithshëm",
+    "bookingVolume": "Volumi i rezervimeve",
+    "monthlyBookingActivity": "Aktiviteti mujor i rezervimeve",
+    "noRevenueData": "Nuk ka të dhëna për të ardhurat",
+    "noBookingData": "Nuk ka të dhëna për rezervime",
+    "systemBusinesses": "Biznese të sistemit",
+    "totalLabel": "Totali",
+    "latest20Bookings": "20 rezervimet e fundit",
+    "noBookingsFound": "Nuk u gjetën rezervime në sistem"
+  },
+  "admin": {
+    "businessType": "Lloji i biznesit",
+    "servicesOffered": "Shërbime të ofruara",
+    "price": "Çmimi",
+    "min": "Min",
+    "dashboardTitle": "Paneli i administratorit",
+    "dashboardSubtitle": "Menaxho biznese dhe rezervime",
+    "businessName": "Emri i biznesit",
+    "businessNamePlaceholder": "p.sh. Master Cuts",
+    "serviceNamePlaceholder": "Emri i shërbimit (p.sh. Prerje flokësh)",
+    "type": {
+      "barber": "Berber",
+      "gym": "Palestrë",
+      "trainingHall": "Sallë trajnimi",
+      "carWash": "Lajth automjetesh"
+    },
+    "calendar": {
+      "title": "Kalendari i rezervimeve",
+      "selectBusiness": "Zgjidhni një biznes për të parë kalendarin"
+    },
+    "pending": {
+      "title": "Rezervime në pritje",
+      "empty": "Nuk ka rezervime në pritje",
+      "processed": "Të gjitha rezervimet janë përpunuar",
+      "customer": "Klienti",
+      "business": "Biznesi",
+      "date": "Data",
+      "time": "Koha",
+      "price": "Çmimi",
+      "accept": "Prano",
+      "reject": "Refuzo"
+    },
+    "selector": {
+      "title": "Zgjidh Biznesin",
+      "choose": "Zgjidh një biznes"
+    },
+    "businessList": {
+      "title": "Bizneset tuaja",
+      "empty": "Nuk ka biznese ende."
+    },
+    "stats": {
+      "totalRevenue": "Të ardhurat totale",
+      "monthlyRevenue": "Të ardhurat mujore",
+      "totalBookings": "Rezervimet totale",
+      "accepted": "Të pranuara",
+      "pending": "Në pritje",
+      "today": "Terminet sot",
+      "thisMonth": "Këtë muaj"
+    },
+    "charts": {
+      "monthlyRevenueTitle": "Të ardhurat mujore",
+      "realTime": "Në kohë reale",
+      "serviceShareTitle": "Shpërndarja e shërbimeve",
+      "byRevenue": "Sipas të ardhurave",
+      "bookingVolumeTitle": "Volumi i rezervimeve",
+      "trends": "Tendencat",
+      "revenue": "Të ardhura",
+      "bookings": "Rezervime",
+      "noRevenue": "Nuk ka të dhëna për të ardhura",
+      "acceptBookings": "Pranoni rezervime për të parë tendencat",
+      "noService": "Nuk ka të dhëna për shërbime",
+      "completeBookings": "Përfundoni rezervimet për të parë performancën",
+      "noBookingTrends": "Nuk ka tendenca rezervimesh",
+      "moreData": "Nevojiten më shumë të dhëna për analizë"
+    }
+  }
+  ,
+  "tablet": {
+    "title": "Tablet i trajnerit",
+    "group": "Grupi",
+    "chooseGroup": "Zgjidh grupin",
+    "session": "Koha e orës",
+    "noMembers": "S'ka anëtarë aktivë",
+    "save": "Ruaj prezencën",
+    "success": "Prezenca u ruajt"
+  },
+  "checkin": {
+    "title": "Vetë-pranimi",
+    "group": "Grupi",
+    "chooseGroup": "Zgjidh grupin",
+    "session": "Koha e orës",
+    "submit": "Jam i pranishëm",
+    "success": "U pranua me sukses",
+    "note": "Vetë-pranimi lejohet pak para/pas fillimit të orës"
+  },
+  "groups": {
+    "title": "Grupet & Anëtarësimet",
+    "create": "Krijo grup",
+    "name": "Emri i grupit",
+    "hall": "Salla (ops.)",
+    "day": "Dita e javës (ops.)",
+    "time": "Koha HH:MM (ops.)",
+    "createBtn": "Krijo",
+    "members": "Anëtarët e grupit",
+    "choose": "Zgjidh grupin",
+    "userId": "ID e përdoruesit",
+    "validTo": "Vlen deri (ops.)",
+    "addMember": "Shto në grup",
+    "noMembers": "S'ka anëtarë",
+    "created": "Grupi u krijua",
+    "memberAdded": "U shtua anëtari në grup"
+  }
+}
