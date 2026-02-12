@@ -8,10 +8,6 @@ import getDay from 'date-fns/getDay';
 import enUS from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useI18n } from '../contexts/I18nContext';
-import { useAuth } from '../contexts/AuthContext';
-// import { apiService } from '../services/api';
-
-axios.defaults.baseURL = import.meta?.env?.VITE_API_BASE || '/api';
 
 // Premium calendar styles
 const premiumStyles = `
@@ -519,7 +515,6 @@ const Calendar = ({ businessId, refreshTrigger }) => {
   const [view, setView] = useState('month');
   const [date, setDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [priceInput, setPriceInput] = useState('');
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -527,8 +522,6 @@ const Calendar = ({ businessId, refreshTrigger }) => {
     rejected: 0
   });
   const { t } = useI18n();
-  const { user } = useAuth();
-  // schedule feature removed
 
   useEffect(() => {
     if (businessId) {
@@ -637,13 +630,10 @@ const Calendar = ({ businessId, refreshTrigger }) => {
 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
-    const p = event?.resource?.price;
-    setPriceInput(p != null ? String(p) : '');
   };
 
   const closeEventModal = () => {
     setSelectedEvent(null);
-    setPriceInput('');
   };
 
   const eventStyleGetter = (event, start, end, isSelected) => {
@@ -690,9 +680,6 @@ const Calendar = ({ businessId, refreshTrigger }) => {
 
   const CustomToolbar = () => null;
 
-  // schedule feature removed
-
-  // schedule feature removed: availability range effect deleted
   if (loading) {
     return (
       <div className="premium-calendar">
@@ -789,7 +776,6 @@ const Calendar = ({ businessId, refreshTrigger }) => {
             </button>
           </div>
         </div>
-        {/* schedule controls removed */}
 
           {events.length === 0 ? (
             <div className="premium-calendar-empty">
@@ -822,7 +808,7 @@ const Calendar = ({ businessId, refreshTrigger }) => {
                 components={{
                   toolbar: CustomToolbar
                 }}
-                eventPropGetter={(event, start, end, isSelected) => eventStyleGetter(event, start, end, isSelected)}
+                eventPropGetter={eventStyleGetter}
               />
             </div>
           )}

@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mysql = require('mysql2/promise');
-const path = require('path');
 
 dotenv.config();
 
@@ -22,8 +21,6 @@ app.use((req, res, next) => {
   req.pool = pool;
   next();
 });
-
-// schedule schema auto-update removed
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
@@ -49,16 +46,6 @@ app.use('/api/attendance', attendanceRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
-});
-
-// Serve frontend build
-const FRONTEND_DIST = path.resolve(__dirname, '../frontend/dist');
-app.use(express.static(FRONTEND_DIST));
-app.get('*', (req, res) => {
-  if (req.originalUrl.startsWith('/api/')) {
-    return res.status(404).json({ error: 'Not found' });
-  }
-  res.sendFile(path.join(FRONTEND_DIST, 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

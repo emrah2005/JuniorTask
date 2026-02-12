@@ -9,6 +9,14 @@ const bookingValidation = [
   body('date').isISO8601().withMessage('Valid date required')
 ];
 
+const getHourWindow = (dateObj) => {
+  const start = new Date(dateObj);
+  start.setMinutes(0, 0, 0);
+  const end = new Date(start);
+  end.setHours(end.getHours() + 1);
+  return { start, end };
+};
+
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let query = `
@@ -126,10 +134,13 @@ router.post('/', authenticateToken, authorizeRoles('User'), bookingValidation, a
       return res.status(400).json({ error: 'Cannot book in the past' });
     }
 
+    const { start, end } = getHourWindow(bookingDate);
     const [existingBookings] = await req.pool.execute(
       `SELECT id FROM bookings 
-       WHERE business_id = ? AND date = ? AND status IN ('pending', 'accepted')`,
-      [business_id, bookingDate]
+       WHERE business_id = ? 
+         AND date >= ? AND date < ? 
+         AND status IN ('pending', 'accepted')`,
+      [business_id, start, end]
     );
 
     if (existingBookings.length > 0) {
@@ -183,10 +194,14 @@ router.put('/:id/status', authenticateToken, authorizeRoles('Admin', 'SuperAdmin
     }
 
     if (status === 'accepted') {
+      const { start, end } = getHourWindow(new Date(booking.date));
       const [existingBookings] = await req.pool.execute(
         `SELECT id FROM bookings 
-         WHERE business_id = ? AND date = ? AND status = 'accepted' AND id != ?`,
-        [booking.business_id, booking.date, req.params.id]
+         WHERE business_id = ? 
+           AND date >= ? AND date < ? 
+           AND status = 'accepted' 
+           AND id != ?`,
+        [booking.business_id, start, end, req.params.id]
       );
 
       if (existingBookings.length > 0) {
@@ -232,6 +247,32 @@ router.delete('/:id', authenticateToken, authorizeRoles('User'), async (req, res
     res.json({ message: 'Booking cancelled successfully' });
   } catch (error) {
     console.error('Error cancelling booking:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/busy-hours', authenticateToken, async (req, res) => {
+  try {
+    const { business_id, date } = req.query;
+    if (!business_id || !date) {
+      return res.status(400).json({ error: 'business_id and date required' });
+    }
+    const dayStart = new Date(date);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart);
+    dayEnd.setDate(dayEnd.getDate() + 1);
+    const [rows] = await req.pool.execute(
+      `SELECT DATE_FORMAT(b.date, '%H') as hour
+       FROM bookings b
+       WHERE b.business_id = ?
+         AND b.date >= ? AND b.date < ?
+         AND b.status IN ('pending','accepted')`,
+      [Number(business_id), dayStart, dayEnd]
+    );
+    const hours = Array.from(new Set(rows.map(r => r.hour))).sort();
+    res.json({ hours });
+  } catch (error) {
+    console.error('Error fetching busy hours:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });

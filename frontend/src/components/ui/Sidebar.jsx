@@ -29,10 +29,8 @@ const Sidebar = () => {
   const navigation = [
     { key: 'dashboard', href: '/dashboard', icon: HomeIcon, roles: ['Admin', 'SuperAdmin', 'User'] },
     { key: 'businesses', href: '/dashboard/businesses', icon: BuildingIcon, roles: ['Admin', 'SuperAdmin'] },
-    { key: 'services', href: '/dashboard/services', icon: SettingsIcon, roles: ['Admin'] },
     { key: 'bookings', href: '/dashboard/bookings', icon: CalendarIcon, roles: ['Admin', 'User'] },
     { key: 'analytics', href: '/dashboard/analytics', icon: BarChart3Icon, roles: ['Admin', 'SuperAdmin'] },
-    { key: 'attendance', href: '/dashboard/attendance', icon: BarChart3Icon, roles: ['Admin', 'SuperAdmin'] },
     { key: 'users', href: '/dashboard/users', icon: UsersIcon, roles: ['Admin', 'SuperAdmin'] }
   ];
 

@@ -4,9 +4,9 @@ const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const router = express.Router();
 
 const serviceValidation = [
-  body('name').optional().trim().isLength({ min: 2 }).withMessage('Service name must be at least 2 characters'),
-  body('price').optional().isFloat({ min: 0 }).withMessage('Price must be a positive number'),
-  body('duration').optional().isInt({ min: 1 }).withMessage('Duration must be at least 1 minute')
+  body('name').trim().isLength({ min: 2 }).withMessage('Service name must be at least 2 characters'),
+  body('price').isFloat({ min: 0 }).withMessage('Price must be a positive number'),
+  body('duration').isInt({ min: 1 }).withMessage('Duration must be at least 1 minute')
 ];
 
 router.get('/business/:businessId', async (req, res) => {
@@ -87,7 +87,7 @@ router.put('/:id', authenticateToken, authorizeRoles('Admin', 'SuperAdmin'), ser
     const { name, price, duration } = req.body;
 
     const [services] = await req.pool.execute(
-      `SELECT s.business_id, b.owner_id, s.name, s.price, s.duration
+      `SELECT s.business_id, b.owner_id 
        FROM services s 
        JOIN businesses b ON s.business_id = b.id 
        WHERE s.id = ?`,
@@ -102,15 +102,9 @@ router.put('/:id', authenticateToken, authorizeRoles('Admin', 'SuperAdmin'), ser
       return res.status(403).json({ error: 'Access denied' });
     }
 
-    const current = services[0];
-    const nextName = name ?? current.name;
-    const nextPrice = price ?? current.price;
-    const nextDuration = duration ?? current.duration;
-    // schedule fields removed
-
     await req.pool.execute(
       'UPDATE services SET name = ?, price = ?, duration = ? WHERE id = ?',
-      [nextName, nextPrice, nextDuration, req.params.id]
+      [name, price, duration, req.params.id]
     );
 
     res.json({ message: 'Service updated successfully' });

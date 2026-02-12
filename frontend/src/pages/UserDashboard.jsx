@@ -3,20 +3,19 @@ import axios from 'axios';
 import { Calendar, Clock, DollarSign, MapPin, X, Search } from 'lucide-react';
 import { useI18n } from '../contexts/I18nContext';
 
-axios.defaults.baseURL = import.meta?.env?.VITE_API_BASE || '/api';
-
 const UserDashboard = () => {
   const { t } = useI18n();
   const [businesses, setBusinesses] = useState([]);
   const [services, setServices] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
-  const [stats, setStats] = useState({ totalSpent: 0, total: 0, accepted: 0, pending: 0 });
   const [selectedBusiness, setSelectedBusiness] = useState('');
   const [selectedService, setSelectedService] = useState('');
   const [bookingDate, setBookingDate] = useState('');
   const [bookingTime, setBookingTime] = useState('');
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const presetTimes = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];
+  const [busyHours, setBusyHours] = useState([]);
 
   useEffect(() => {
     fetchBusinesses();
@@ -49,18 +48,26 @@ const UserDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    const loadBusyHours = async () => {
+      setBusyHours([]);
+      if (!selectedBusiness || !bookingDate) return;
+      try {
+        const resp = await axios.get('/api/bookings/busy-hours', {
+          params: { business_id: selectedBusiness, date: bookingDate }
+        });
+        setBusyHours(Array.isArray(resp.data.hours) ? resp.data.hours : []);
+      } catch (e) {
+        console.error('Error fetching busy hours', e);
+      }
+    };
+    loadBusyHours();
+  }, [selectedBusiness, bookingDate]);
+
   const fetchMyBookings = async () => {
     try {
       const response = await axios.get('/api/dashboard/user');
-      const arr = Array.isArray(response.data.bookings) ? response.data.bookings : [];
-      setMyBookings(arr);
-      const total = arr.length;
-      const accepted = arr.filter(b => b.status === 'accepted').length;
-      const pending = arr.filter(b => b.status === 'pending').length;
-      const totalSpent = arr
-        .filter(b => b.status === 'accepted')
-        .reduce((sum, b) => sum + (parseFloat(b.price) || 0), 0);
-      setStats({ totalSpent, total, accepted, pending });
+      setMyBookings(response.data.bookings);
     } catch (error) {
       console.error('Error fetching bookings:', error);
     }
@@ -122,6 +129,12 @@ const UserDashboard = () => {
     );
   }
 
+  const totalBookings = myBookings.length;
+  const acceptedBookings = myBookings.filter(b => b.status === 'accepted').length;
+  const totalSpent = myBookings
+    .filter(b => b.status === 'accepted')
+    .reduce((sum, b) => sum + (parseFloat(b.price) || 0), 0);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
@@ -129,22 +142,18 @@ const UserDashboard = () => {
         <p className="text-gray-600 mt-2">{t('userDashboard.subtitle')}</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
-          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.totalSpent', 'Total Spent')}</div>
-          <div className="mt-1 text-2xl font-bold text-gray-900">${stats.totalSpent.toLocaleString()}</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-sm text-gray-500">{t('userDashboard.stats.totalSpent', 'Total Spent')}</div>
+          <div className="text-2xl font-bold mt-1">€{totalSpent.toFixed(2)}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
-          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.totalBookings', 'Bookings')}</div>
-          <div className="mt-1 text-2xl font-bold text-gray-900">{stats.total}</div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-sm text-gray-500">{t('userDashboard.stats.totalBookings', 'Total Bookings')}</div>
+          <div className="text-2xl font-bold mt-1">{totalBookings}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
-          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.accepted', 'Accepted')}</div>
-          <div className="mt-1 text-2xl font-bold text-emerald-600">{stats.accepted}</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
-          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.pending', 'Pending')}</div>
-          <div className="mt-1 text-2xl font-bold text-amber-600">{stats.pending}</div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-sm text-gray-500">{t('userDashboard.stats.acceptedBookings', 'Accepted Bookings')}</div>
+          <div className="text-2xl font-bold mt-1">{acceptedBookings}</div>
         </div>
       </div>
 
@@ -203,9 +212,9 @@ const UserDashboard = () => {
                         <p className="text-sm text-gray-600">{booking.service_name}</p>
                         <div className="flex items-center text-sm text-gray-500 mt-2">
                           <Calendar className="w-4 h-4 mr-1" />
-                          {new Date(booking.date).toLocaleDateString()}
+                          {new Date(booking.date).toLocaleDateString('en-GB')}
                           <Clock className="w-4 h-4 ml-3 mr-1" />
-                          {new Date(booking.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                          {new Date(booking.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false})}
                         </div>
                         <div className="flex items-center text-sm text-gray-500 mt-1">
                           <DollarSign className="w-4 h-4 mr-1" />
@@ -308,13 +317,32 @@ const UserDashboard = () => {
                   className="w-full border rounded-lg px-3 py-2"
                   value={bookingTime}
                   onChange={(e) => setBookingTime(e.target.value)}
+                  step="900"
                 />
+                <div className="grid grid-cols-3 gap-2 mt-3">
+                  {presetTimes.map(ti => (
+                    <button
+                      key={ti}
+                      type="button"
+                      onClick={() => setBookingTime(ti)}
+                      disabled={busyHours.includes(ti.split(':')[0])}
+                      className={`px-3 py-2 rounded-lg border ${
+                        bookingTime === ti ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-50'
+                      } ${busyHours.includes(ti.split(':')[0]) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {ti}{busyHours.includes(ti.split(':')[0]) ? ' (busy)' : ''}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 flex-1"
+                  disabled={busyHours.includes(bookingTime.split(':')[0])}
+                  className={`bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 flex-1 ${
+                    busyHours.includes(bookingTime.split(':')[0]) ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                 >
                   {t('userDashboard.bookNow')}
                 </button>

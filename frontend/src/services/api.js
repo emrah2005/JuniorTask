@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with default configuration
 const api = axios.create({
-  baseURL: import.meta?.env?.VITE_API_BASE || '/api',
+  baseURL: '/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -321,18 +321,6 @@ export const apiService = {
         return response.data;
       } catch (error) {
         throw new Error(error.response?.data?.error || 'Failed to create group');
-      }
-    },
-    update: async (id, groupData) => {
-      try {
-        const response = await api.put(`/groups/${id}`, groupData);
-        return response.data;
-      } catch (error) {
-        const apiErr = error.response?.data;
-        if (apiErr?.errors && Array.isArray(apiErr.errors) && apiErr.errors.length > 0) {
-          throw new Error(apiErr.errors[0].msg || 'Failed to update group');
-        }
-        throw new Error(apiErr?.error || 'Failed to update group');
       }
     }
   },

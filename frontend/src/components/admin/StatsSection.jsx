@@ -17,28 +17,32 @@ const StatsSection = ({ stats }) => {
       value: safeStats.totalRevenue,
       icon: DollarSign,
       bgColor: 'bg-green-100',
-      iconColor: 'text-green-600'
+      iconColor: 'text-green-600',
+      format: 'currency'
     },
     {
       title: t('admin.stats.monthlyRevenue', 'Monthly Revenue'),
       value: safeStats.monthlyRevenue,
       icon: TrendingUp,
       bgColor: 'bg-blue-100',
-      iconColor: 'text-blue-600'
+      iconColor: 'text-blue-600',
+      format: 'currency'
     },
     {
       title: t('admin.stats.totalBookings', 'Total Bookings'),
       value: safeStats.totalBookings,
       icon: CalendarIcon,
       bgColor: 'bg-purple-100',
-      iconColor: 'text-purple-600'
+      iconColor: 'text-purple-600',
+      format: 'count'
     },
     {
       title: t('admin.stats.accepted', 'Accepted'),
       value: safeStats.acceptedBookings,
       icon: Building,
       bgColor: 'bg-yellow-100',
-      iconColor: 'text-yellow-600'
+      iconColor: 'text-yellow-600',
+      format: 'count'
     }
   ];
 
@@ -53,7 +57,9 @@ const StatsSection = ({ stats }) => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">{stat.title}</p>
               <p className="text-2xl font-bold text-gray-900">
-                {typeof stat.value === 'number' ? `$${stat.value.toFixed(2)}` : stat.value}
+                {stat.format === 'currency'
+                  ? `$${Number(stat.value).toFixed(2)}`
+                  : `${Number(stat.value)}`}
               </p>
             </div>
           </div>

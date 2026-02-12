@@ -318,7 +318,6 @@
     "hall": "Hall (opt.)",
     "day": "Weekday (opt.)",
     "time": "Time HH:MM (opt.)",
-    "price": "Price (opt.)",
     "createBtn": "Create",
     "members": "Group members",
     "choose": "Choose group",
@@ -327,14 +326,7 @@
     "addMember": "Add to group",
     "noMembers": "No members",
     "created": "Group created",
-    "memberAdded": "Member added to group",
-    "edit": "Edit group",
-    "updateBtn": "Update",
-    "updated": "Group updated"
-  }
-  ,
-  "tablet": {
-    "salaGroups": "Group Hall"
+    "memberAdded": "Member added to group"
   }
   ,
   "attendance": {

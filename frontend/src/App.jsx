@@ -9,8 +9,7 @@ import Register from './pages/Register';
 import SuperAdmin from './pages/SuperAdmin';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
-import SelfCheckin from './pages/SelfCheckin';
-import AttendanceDashboard from './pages/AttendanceDashboard';
+
 import UsersManager from './pages/UsersManager';
 
 function ProtectedRoute({ children, allowedRoles }) {
@@ -60,14 +59,6 @@ function AppRoutes() {
           } 
         />
         <Route 
-          path="/dashboard/attendance" 
-          element={
-            <ProtectedRoute allowedRoles={['Admin','SuperAdmin']}>
-              <AttendanceDashboard />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
           path="/dashboard/users" 
           element={
             <ProtectedRoute allowedRoles={['Admin','SuperAdmin']}>
@@ -75,20 +66,11 @@ function AppRoutes() {
             </ProtectedRoute>
           } 
         />
-        
         <Route 
           path="/dashboard/user" 
           element={
             <ProtectedRoute allowedRoles={['User']}>
               <UserDashboard />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/checkin" 
-          element={
-            <ProtectedRoute allowedRoles={['User']}>
-              <SelfCheckin />
             </ProtectedRoute>
           } 
         />
