@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { Menu as MenuIcon } from 'lucide-react';
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +29,17 @@ const Navbar = () => {
               </div>
               <span className="text-xl font-bold text-gray-900">BookingPro</span>
             </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center">
+            <button
+              aria-label="Open menu"
+              onClick={onMenuClick}
+              className="p-2 rounded-md border border-gray-200 hover:bg-gray-100"
+            >
+              <MenuIcon className="w-5 h-5 text-gray-700" />
+            </button>
           </div>
 
           {/* Navigation Links */}
