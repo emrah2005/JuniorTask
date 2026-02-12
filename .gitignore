@@ -33,3 +33,6 @@ Thumbs.db
 *.local
 *.swp
 *.swo
+
+# Large media (exclude oversized demo video)
+frontend/public/video.mp4
