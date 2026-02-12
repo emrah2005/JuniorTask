@@ -6,6 +6,17 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 const AppLayout = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  React.useEffect(() => {
+    document.body.style.overflow = sidebarOpen ? 'hidden' : '';
+    const onKey = (e) => {
+      if (e.key === 'Escape') setSidebarOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [sidebarOpen]);
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50">
@@ -26,14 +37,17 @@ const AppLayout = () => {
             </main>
           </div>
         </div>
-        {sidebarOpen && (
-          <div className="fixed inset-0 z-50">
-            <div className="absolute inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-            <div className="absolute left-0 top-0 h-full w-64">
-              <Sidebar />
-            </div>
+        <div className={`fixed inset-0 z-50 ${sidebarOpen ? '' : 'pointer-events-none'}`}>
+          <div
+            className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0'}`}
+            onClick={() => setSidebarOpen(false)}
+          />
+          <div
+            className={`absolute left-0 top-0 h-full w-64 transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          >
+            <Sidebar />
           </div>
-        )}
+        </div>
       </div>
     </ErrorBoundary>
   );
