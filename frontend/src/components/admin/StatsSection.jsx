@@ -47,16 +47,16 @@ const StatsSection = ({ stats }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
       {statCards.map((stat, index) => (
-        <div key={index} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-100">
-          <div className="flex items-center">
-            <div className={`${stat.bgColor} rounded-xl p-3`}>
-              <stat.icon className={`w-6 h-6 ${stat.iconColor}`} />
+        <div key={index} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-4 sm:p-6 border border-gray-100">
+          <div className="flex items-center min-w-0">
+            <div className={`${stat.bgColor} rounded-xl p-2 sm:p-3 shrink-0`}>
+              <stat.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.iconColor}`} />
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-              <p className="text-2xl font-bold text-gray-900">
+            <div className="ml-3 sm:ml-4 min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">{stat.title}</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
                 {stat.format === 'currency'
                   ? `$${Number(stat.value).toFixed(2)}`
                   : `${Number(stat.value)}`}

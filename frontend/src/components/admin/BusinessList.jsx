@@ -6,7 +6,7 @@ const BusinessList = ({ businesses }) => {
   const safeBusinesses = Array.isArray(businesses) ? businesses : [];
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('admin.businessList.title', 'Your Businesses')}</h3>
       
       {safeBusinesses.length === 0 ? (
@@ -15,10 +15,10 @@ const BusinessList = ({ businesses }) => {
         <div className="space-y-2">
           {safeBusinesses.map((business) => (
             <div key={business.id} className="border border-gray-200 rounded-lg p-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h4 className="font-semibold text-gray-900 text-sm">{business.name}</h4>
-                  <p className="text-xs text-gray-600">{business.type}</p>
+              <div className="flex justify-between items-start min-w-0">
+                <div className="min-w-0">
+                  <h4 className="font-semibold text-gray-900 text-sm truncate">{business.name}</h4>
+                  <p className="text-xs text-gray-600 truncate">{business.type}</p>
                 </div>
               </div>
             </div>

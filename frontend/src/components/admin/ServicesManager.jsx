@@ -90,19 +90,19 @@ const ServicesManager = ({ businessId }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('admin.servicesManager.title', 'Services')}</h3>
       {!businessId && <div className="text-gray-500">{t('admin.servicesManager.select', 'Select a business to manage services')}</div>}
       {businessId && (
         <>
           {error && <div className="mb-3 p-2 bg-red-100 text-red-700 rounded-lg text-sm">{error}</div>}
-          <form onSubmit={addService} className="grid md:grid-cols-3 gap-3 mb-4">
+          <form onSubmit={addService} className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4">
             <input
               type="text"
               placeholder={t('admin.serviceNamePlaceholder', 'Service Name')}
               value={newService.name}
               onChange={(e) => setNewService({ ...newService, name: e.target.value })}
-              className="border rounded-lg px-3 py-2"
+              className="border rounded-lg px-3 py-2 w-full"
             />
             <input
               type="number"
@@ -111,7 +111,7 @@ const ServicesManager = ({ businessId }) => {
               placeholder={t('admin.price', 'Price')}
               value={newService.price}
               onChange={(e) => setNewService({ ...newService, price: e.target.value })}
-              className="border rounded-lg px-3 py-2"
+              className="border rounded-lg px-3 py-2 w-full"
             />
             <div className="flex gap-2">
               <input
@@ -126,14 +126,14 @@ const ServicesManager = ({ businessId }) => {
             </div>
           </form>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto -mx-2 sm:mx-0">
             <table className="min-w-full text-sm">
               <thead>
                 <tr className="text-left border-b">
                   <th className="p-2">ID</th>
                   <th className="p-2">{t('admin.serviceName', 'Name')}</th>
-                  <th className="p-2">{t('admin.price', 'Price')}</th>
-                  <th className="p-2">{t('admin.duration', 'Duration')}</th>
+                  <th className="p-2 text-right">{t('admin.price', 'Price')}</th>
+                  <th className="p-2 text-right">{t('admin.duration', 'Duration')}</th>
                   <th className="p-2">{t('common.actions', 'Actions')}</th>
                 </tr>
               </thead>
@@ -156,7 +156,7 @@ const ServicesManager = ({ businessId }) => {
                         />
                       ) : svc.name}
                     </td>
-                    <td className="p-2">
+                    <td className="p-2 text-right">
                       {editing === svc.id ? (
                         <input
                           type="number"
@@ -166,7 +166,7 @@ const ServicesManager = ({ businessId }) => {
                         />
                       ) : svc.price}
                     </td>
-                    <td className="p-2">
+                    <td className="p-2 text-right">
                       {editing === svc.id ? (
                         <input
                           type="number"

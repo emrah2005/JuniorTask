@@ -136,22 +136,22 @@ const UserDashboard = () => {
     .reduce((sum, b) => sum + (parseFloat(b.price) || 0), 0);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{t('userDashboard.title')}</h1>
-        <p className="text-gray-600 mt-2">{t('userDashboard.subtitle')}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('userDashboard.title')}</h1>
+        <p className="text-gray-600 mt-1 sm:mt-2">{t('userDashboard.subtitle')}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <div className="text-sm text-gray-500">{t('userDashboard.stats.totalSpent', 'Total Spent')}</div>
           <div className="text-2xl font-bold mt-1">€{totalSpent.toFixed(2)}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <div className="text-sm text-gray-500">{t('userDashboard.stats.totalBookings', 'Total Bookings')}</div>
           <div className="text-2xl font-bold mt-1">{totalBookings}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <div className="text-sm text-gray-500">{t('userDashboard.stats.acceptedBookings', 'Accepted Bookings')}</div>
           <div className="text-2xl font-bold mt-1">{acceptedBookings}</div>
         </div>
@@ -160,7 +160,7 @@ const UserDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Businesses and Booking */}
         <div>
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-gray-900">{t('userDashboard.availableBusinesses')}</h2>
               <button
@@ -177,11 +177,11 @@ const UserDashboard = () => {
               <div className="space-y-4">
                 {businesses.map((business) => (
                   <div key={business.id} className="border rounded-lg p-4 hover:shadow-md transition">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{business.name}</h3>
-                        <p className="text-sm text-gray-600">{business.type}</p>
-                        <p className="text-sm text-gray-500 mt-1">Owner: {business.owner_name}</p>
+                    <div className="flex justify-between items-start min-w-0">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-gray-900 truncate">{business.name}</h3>
+                        <p className="text-sm text-gray-600 truncate">{business.type}</p>
+                        <p className="text-sm text-gray-500 mt-1 truncate">Owner: {business.owner_name}</p>
                       </div>
                       <div className="flex items-center text-gray-500">
                         <MapPin className="w-4 h-4 mr-1" />
@@ -197,7 +197,7 @@ const UserDashboard = () => {
 
         {/* My Bookings */}
         <div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('userDashboard.myBookings')}</h2>
             
             {myBookings.length === 0 ? (
@@ -207,9 +207,9 @@ const UserDashboard = () => {
                 {myBookings.map((booking) => (
                   <div key={booking.id} className="border rounded-lg p-4">
                     <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">{booking.business_name}</h3>
-                        <p className="text-sm text-gray-600">{booking.service_name}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-900 truncate">{booking.business_name}</h3>
+                        <p className="text-sm text-gray-600 truncate">{booking.service_name}</p>
                         <div className="flex items-center text-sm text-gray-500 mt-2">
                           <Calendar className="w-4 h-4 mr-1" />
                           {new Date(booking.date).toLocaleDateString('en-GB')}
@@ -246,7 +246,7 @@ const UserDashboard = () => {
       {/* Booking Form Modal */}
       {showBookingForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+          <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-sm sm:max-w-md">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{t('userDashboard.bookAppointment')}</h2>
               <button
@@ -319,14 +319,14 @@ const UserDashboard = () => {
                   onChange={(e) => setBookingTime(e.target.value)}
                   step="900"
                 />
-                <div className="grid grid-cols-3 gap-2 mt-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mt-3">
                   {presetTimes.map(ti => (
                     <button
                       key={ti}
                       type="button"
                       onClick={() => setBookingTime(ti)}
                       disabled={busyHours.includes(ti.split(':')[0])}
-                      className={`px-3 py-2 rounded-lg border ${
+                      className={`px-2 py-2 rounded-lg border text-sm ${
                         bookingTime === ti ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-50'
                       } ${busyHours.includes(ti.split(':')[0]) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
