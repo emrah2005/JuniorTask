@@ -28,7 +28,7 @@ const AppLayout = () => {
           <div className="flex-1 flex flex-col">
             <Navbar onMenuClick={() => setSidebarOpen(true)} />
             
-            <main className="flex-1 overflow-auto">
+            <main className="flex-1 overflow-auto pt-16">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <ErrorBoundary>
                   <Outlet />
