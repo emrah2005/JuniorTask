@@ -6,3 +6,23 @@ publish = "frontend/dist"
 from = "/*"
 to = "/index.html"
 status = 200
+
+# Functions configuration
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Environment variables (configure in Netlify dashboard)
+# DB_HOST = your-database-host
+# DB_USER = your-database-user  
+# DB_PASSWORD = your-database-password
+# DB_NAME = booking_saas
+# JWT_SECRET = your-jwt-secret
+
+# Headers for API routes
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
