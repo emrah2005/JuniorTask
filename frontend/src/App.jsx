@@ -9,9 +9,7 @@ import Register from './pages/Register';
 import SuperAdmin from './pages/SuperAdmin';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
-import CoachTablet from './pages/CoachTablet';
 import SelfCheckin from './pages/SelfCheckin';
-import GroupsManager from './pages/GroupsManager';
 import AttendanceDashboard from './pages/AttendanceDashboard';
 import UsersManager from './pages/UsersManager';
 
@@ -70,26 +68,10 @@ function AppRoutes() {
           } 
         />
         <Route 
-          path="/dashboard/groups" 
-          element={
-            <ProtectedRoute allowedRoles={['Admin','SuperAdmin']}>
-              <GroupsManager />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
           path="/dashboard/users" 
           element={
             <ProtectedRoute allowedRoles={['Admin','SuperAdmin']}>
               <UsersManager />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/tablet" 
-          element={
-            <ProtectedRoute allowedRoles={['Admin','SuperAdmin']}>
-              <CoachTablet />
             </ProtectedRoute>
           } 
         />

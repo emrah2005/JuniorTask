@@ -3,11 +3,14 @@ import axios from 'axios';
 import { Calendar, Clock, DollarSign, MapPin, X, Search } from 'lucide-react';
 import { useI18n } from '../contexts/I18nContext';
 
+axios.defaults.baseURL = import.meta?.env?.VITE_API_BASE || '/api';
+
 const UserDashboard = () => {
   const { t } = useI18n();
   const [businesses, setBusinesses] = useState([]);
   const [services, setServices] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
+  const [stats, setStats] = useState({ totalSpent: 0, total: 0, accepted: 0, pending: 0 });
   const [selectedBusiness, setSelectedBusiness] = useState('');
   const [selectedService, setSelectedService] = useState('');
   const [bookingDate, setBookingDate] = useState('');
@@ -49,7 +52,15 @@ const UserDashboard = () => {
   const fetchMyBookings = async () => {
     try {
       const response = await axios.get('/api/dashboard/user');
-      setMyBookings(response.data.bookings);
+      const arr = Array.isArray(response.data.bookings) ? response.data.bookings : [];
+      setMyBookings(arr);
+      const total = arr.length;
+      const accepted = arr.filter(b => b.status === 'accepted').length;
+      const pending = arr.filter(b => b.status === 'pending').length;
+      const totalSpent = arr
+        .filter(b => b.status === 'accepted')
+        .reduce((sum, b) => sum + (parseFloat(b.price) || 0), 0);
+      setStats({ totalSpent, total, accepted, pending });
     } catch (error) {
       console.error('Error fetching bookings:', error);
     }
@@ -116,6 +127,25 @@ const UserDashboard = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">{t('userDashboard.title')}</h1>
         <p className="text-gray-600 mt-2">{t('userDashboard.subtitle')}</p>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
+          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.totalSpent', 'Total Spent')}</div>
+          <div className="mt-1 text-2xl font-bold text-gray-900">${stats.totalSpent.toLocaleString()}</div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
+          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.totalBookings', 'Bookings')}</div>
+          <div className="mt-1 text-2xl font-bold text-gray-900">{stats.total}</div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
+          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.accepted', 'Accepted')}</div>
+          <div className="mt-1 text-2xl font-bold text-emerald-600">{stats.accepted}</div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4 border border-gray-100">
+          <div className="text-sm font-semibold text-gray-500">{t('userDashboard.pending', 'Pending')}</div>
+          <div className="mt-1 text-2xl font-bold text-amber-600">{stats.pending}</div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

@@ -27,6 +27,8 @@ CREATE TABLE services (
   name VARCHAR(255) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
   duration INT NOT NULL COMMENT 'Duration in minutes',
+  schedule_day TINYINT NULL COMMENT '0=Sun..6=Sat',
+  schedule_time TIME NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (business_id) REFERENCES businesses(id) ON DELETE CASCADE

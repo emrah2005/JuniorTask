@@ -5,23 +5,13 @@ import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContaine
 
 const AttendanceDashboard = () => {
   const { t } = useI18n();
-  const [groups, setGroups] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState('');
   const [from, setFrom] = useState(() => new Date(new Date().setDate(new Date().getDate() - 14)).toISOString().slice(0,10));
   const [to, setTo] = useState(() => new Date().toISOString().slice(0,10));
   const [summary, setSummary] = useState([]);
   const [list, setList] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      const g = await apiService.groups.getAll();
-      setGroups(g);
-    })();
-  }, []);
-
   const loadData = async () => {
     const params = {
-      group_id: selectedGroup || undefined,
       from: from ? new Date(from).toISOString() : undefined,
       to: to ? new Date(to).toISOString() : undefined
     };
@@ -33,19 +23,12 @@ const AttendanceDashboard = () => {
 
   useEffect(() => {
     loadData();
-  }, [selectedGroup, from, to]);
+  }, [from, to]);
 
   return (
     <div className="max-w-6xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">{t('attendance.title', 'Присуство')}</h1>
-      <div className="bg-white border rounded-xl p-4 mb-6 grid md:grid-cols-4 gap-3">
-        <div>
-          <label className="block text-sm font-medium mb-1">{t('attendance.group', 'Група')}</label>
-          <select className="w-full border rounded-lg px-3 py-2" value={selectedGroup} onChange={e => setSelectedGroup(e.target.value)}>
-            <option value="">{t('attendance.allGroups', 'Сите групи')}</option>
-            {groups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
-          </select>
-        </div>
+      <div className="bg-white border rounded-xl p-4 mb-6 grid md:grid-cols-3 gap-3">
         <div>
           <label className="block text-sm font-medium mb-1">{t('attendance.from', 'Од')}</label>
           <input type="date" className="w-full border rounded-lg px-3 py-2" value={from} onChange={e => setFrom(e.target.value)} />
@@ -107,4 +90,3 @@ const AttendanceDashboard = () => {
 };
 
 export default AttendanceDashboard;
-

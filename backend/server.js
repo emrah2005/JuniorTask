@@ -23,6 +23,8 @@ app.use((req, res, next) => {
   next();
 });
 
+// schedule schema auto-update removed
+
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const businessRoutes = require('./routes/businesses');

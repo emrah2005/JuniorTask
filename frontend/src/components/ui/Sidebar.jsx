@@ -32,7 +32,6 @@ const Sidebar = () => {
     { key: 'services', href: '/dashboard/services', icon: SettingsIcon, roles: ['Admin'] },
     { key: 'bookings', href: '/dashboard/bookings', icon: CalendarIcon, roles: ['Admin', 'User'] },
     { key: 'analytics', href: '/dashboard/analytics', icon: BarChart3Icon, roles: ['Admin', 'SuperAdmin'] },
-    { key: 'groups', href: '/dashboard/groups', icon: UsersIcon, roles: ['Admin', 'SuperAdmin'] },
     { key: 'attendance', href: '/dashboard/attendance', icon: BarChart3Icon, roles: ['Admin', 'SuperAdmin'] },
     { key: 'users', href: '/dashboard/users', icon: UsersIcon, roles: ['Admin', 'SuperAdmin'] }
   ];

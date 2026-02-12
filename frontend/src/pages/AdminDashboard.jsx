@@ -13,6 +13,7 @@ import PendingBookingsSection from '../components/admin/PendingBookingsSection';
 import ChartsSection from '../components/admin/ChartsSection';
 import BusinessList from '../components/admin/BusinessList';
 import { apiService } from '../services/api';
+import { useServices } from '../hooks/useApi';
 import ErrorBoundary from '../components/admin/ErrorBoundary';
 
 const AdminDashboard = () => {
@@ -39,6 +40,10 @@ const AdminDashboard = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [newService, setNewService] = useState({ name: '', price: '', duration: '30' });
+  const { data: services = [], loading: servicesLoading, error: servicesError, refetch: refetchServices } = useServices(selectedBusinessId);
+  const [editingServiceId, setEditingServiceId] = useState(null);
+  const [editService, setEditService] = useState({ name: '', price: '', duration: '30' });
 
   // Calculate real-time chart data from bookings
   const charts = useMemo(() => {
@@ -284,18 +289,6 @@ const AdminDashboard = () => {
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
         <div className="flex items-center gap-2">
-          <Link
-            to="/dashboard/groups"
-            className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            {t('sidebar.items.groups', 'Groups')}
-          </Link>
-          <Link
-            to="/tablet"
-            className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            {t('sidebar.items.groups', 'Креирај Група')}
-          </Link>
           <button
             onClick={() => setIsModalOpen(true)}
             className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
@@ -448,7 +441,17 @@ const AdminDashboard = () => {
       )}
 
       <ErrorBoundary>
-        {/* Premium Calendar at the top */}
+        {/* Business selector placed above calendar */}
+        <div className="mb-8">
+          <ErrorBoundary>
+            <BusinessSelector 
+              businesses={businesses}
+              selectedBusinessId={selectedBusinessId}
+              onSelectBusiness={handleSelectBusiness}
+            />
+          </ErrorBoundary>
+        </div>
+        {/* Calendar */}
         <div className="mb-8">
           <ErrorBoundary>
             <CalendarSection 
@@ -458,19 +461,186 @@ const AdminDashboard = () => {
           </ErrorBoundary>
         </div>
 
+        {/* Services Management */}
+        {selectedBusinessId && (
+          <div className="mb-8">
+            <ErrorBoundary>
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{t('admin.services.title','Services')}</h3>
+                </div>
+                
+                {/* Add Service Form */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                  <input
+                    type="text"
+                    placeholder={t('admin.serviceNamePlaceholder','Service Name')}
+                    value={newService.name}
+                    onChange={e => setNewService(s => ({ ...s, name: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder={t('admin.price','Price')}
+                      value={newService.price}
+                      onChange={e => setNewService(s => ({ ...s, price: e.target.value }))}
+                      className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder={t('admin.min','Min')}
+                      value={newService.duration}
+                      onChange={e => setNewService(s => ({ ...s, duration: e.target.value }))}
+                      className="w-full pr-12 pl-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] font-bold uppercase">min</span>
+                  </div>
+                </div>
+                <div className="flex justify-end mb-6">
+                  <button
+                    onClick={async () => {
+                      if (!newService.name || !newService.price) return;
+                      try {
+                        await apiService.services.create({
+                          business_id: Number(selectedBusinessId),
+                          name: newService.name,
+                          price: parseFloat(newService.price),
+                          duration: parseInt(newService.duration)
+                        });
+                        setNewService({ name: '', price: '', duration: '30' });
+                        await refetchServices();
+                      } catch (err) {
+                        setError(err.message || 'Failed to add service');
+                      }
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    {t('admin.addService','Add Service')}
+                  </button>
+                </div>
+
+                {/* Services List */}
+                {servicesLoading ? (
+                  <div className="text-gray-500">{t('loading','Loading...')}</div>
+                ) : servicesError ? (
+                  <div className="text-red-600">{servicesError}</div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {(Array.isArray(services) ? services : []).map(svc => (
+                      <div key={svc.id} className="p-4 border border-gray-200 rounded-lg flex items-center justify-between">
+                        {editingServiceId === svc.id ? (
+                          <div className="w-full flex items-center justify-between gap-3">
+                            <div className="flex-1 grid grid-cols-3 gap-2">
+                              <input
+                                className="px-2 py-1 border border-gray-300 rounded"
+                                value={editService.name}
+                                onChange={e => setEditService(s => ({ ...s, name: e.target.value }))}
+                              />
+                              <input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                className="px-2 py-1 border border-gray-300 rounded"
+                                value={editService.price}
+                                onChange={e => setEditService(s => ({ ...s, price: e.target.value }))}
+                              />
+                              <input
+                                type="number"
+                                min="1"
+                                className="px-2 py-1 border border-gray-300 rounded"
+                                value={editService.duration}
+                                onChange={e => setEditService(s => ({ ...s, duration: e.target.value }))}
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    await apiService.services.update(svc.id, {
+                                      name: editService.name,
+                                      price: parseFloat(editService.price),
+                                      duration: parseInt(editService.duration)
+                                    });
+                                    setEditingServiceId(null);
+                                    setEditService({ name: '', price: '', duration: '30' });
+                                    await refetchServices();
+                                  } catch (err) {
+                                    setError(err.message || 'Failed to update service');
+                                  }
+                                }}
+                                className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm"
+                              >
+                                {t('save','Save')}
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEditingServiceId(null);
+                                  setEditService({ name: '', price: '', duration: '30' });
+                                }}
+                                className="px-3 py-1.5 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-sm"
+                              >
+                                {t('cancel','Cancel')}
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div>
+                              <div className="font-semibold text-gray-900">{svc.name}</div>
+                              <div className="text-sm text-gray-600">
+                                ${svc.price} · {svc.duration} {t('admin.min','min')}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => {
+                                  setEditingServiceId(svc.id);
+                                  setEditService({ name: svc.name, price: String(svc.price), duration: String(svc.duration) });
+                                }}
+                                className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
+                              >
+                                {t('edit','Edit')}
+                              </button>
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    await apiService.services.delete(svc.id);
+                                    await refetchServices();
+                                  } catch (err) {
+                                    setError(err.message || 'Failed to delete service');
+                                  }
+                                }}
+                                className="px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
+                              >
+                                {t('delete','Delete')}
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                    {services.length === 0 && (
+                      <div className="text-gray-500">{t('admin.noServices','No services yet')}</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </ErrorBoundary>
+          </div>
+        )}
+
         {/* Stats Section */}
         <StatsSection stats={stats} />
         
-        {/* Business Selector and Business List */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <ErrorBoundary>
-            <BusinessSelector 
-              businesses={businesses}
-              selectedBusinessId={selectedBusinessId}
-              onSelectBusiness={handleSelectBusiness}
-            />
-          </ErrorBoundary>
-          
+        {/* Business List */}
+        <div className="grid grid-cols-1 gap-8 mb-8">
           <ErrorBoundary>
             <BusinessList businesses={businesses} />
           </ErrorBoundary>

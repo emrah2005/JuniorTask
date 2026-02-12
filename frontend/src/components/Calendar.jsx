@@ -9,7 +9,9 @@ import enUS from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useI18n } from '../contexts/I18nContext';
 import { useAuth } from '../contexts/AuthContext';
-import { apiService } from '../services/api';
+// import { apiService } from '../services/api';
+
+axios.defaults.baseURL = import.meta?.env?.VITE_API_BASE || '/api';
 
 // Premium calendar styles
 const premiumStyles = `
@@ -517,6 +519,7 @@ const Calendar = ({ businessId, refreshTrigger }) => {
   const [view, setView] = useState('month');
   const [date, setDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [priceInput, setPriceInput] = useState('');
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -525,11 +528,7 @@ const Calendar = ({ businessId, refreshTrigger }) => {
   });
   const { t } = useI18n();
   const { user } = useAuth();
-  const [allGroups, setAllGroups] = useState([]);
-  const [useGroupSessions, setUseGroupSessions] = useState(false);
-  const [selectedGroupId, setSelectedGroupId] = useState('');
-  const [groupDurationMin, setGroupDurationMin] = useState(60);
-  const [groupEvents, setGroupEvents] = useState([]);
+  // schedule feature removed
 
   useEffect(() => {
     if (businessId) {
@@ -638,10 +637,13 @@ const Calendar = ({ businessId, refreshTrigger }) => {
 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
+    const p = event?.resource?.price;
+    setPriceInput(p != null ? String(p) : '');
   };
 
   const closeEventModal = () => {
     setSelectedEvent(null);
+    setPriceInput('');
   };
 
   const eventStyleGetter = (event, start, end, isSelected) => {
@@ -688,91 +690,9 @@ const Calendar = ({ businessId, refreshTrigger }) => {
 
   const CustomToolbar = () => null;
 
-  // Load groups for current user role
-  useEffect(() => {
-    const loadGroups = async () => {
-      try {
-        if (user?.role === 'SuperAdmin') {
-          const g = await apiService.groups.getAll();
-          setAllGroups(Array.isArray(g) ? g : []);
-        } else if (user?.role === 'Admin') {
-          const g = await apiService.groups.getMyTrainerGroups();
-          setAllGroups(Array.isArray(g) ? g : []);
-        } else {
-          setAllGroups([]);
-        }
-      } catch {
-        setAllGroups([]);
-      }
-    };
-    loadGroups();
-  }, [user]);
+  // schedule feature removed
 
-  // Generate group session events for current view and date
-  useEffect(() => {
-    const makeGroupEvents = () => {
-      if (!useGroupSessions) {
-        setGroupEvents([]);
-        return;
-      }
-      const groupsToUse = selectedGroupId
-        ? allGroups.filter(x => String(x.id) === String(selectedGroupId))
-        : allGroups.filter(x => x.schedule_day != null && x.schedule_time);
-      // Determine range based on current view
-      let startRange, endRange;
-      const d = new Date(date);
-      if (view === 'month') {
-        startRange = new Date(d.getFullYear(), d.getMonth(), 1);
-        endRange = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
-      } else if (view === 'week') {
-        const day = d.getDay();
-        startRange = new Date(d);
-        startRange.setDate(d.getDate() - day);
-        startRange.setHours(0,0,0,0);
-        endRange = new Date(startRange);
-        endRange.setDate(startRange.getDate() + 6);
-        endRange.setHours(23,59,59,999);
-      } else {
-        startRange = new Date(d);
-        startRange.setHours(0,0,0,0);
-        endRange = new Date(d);
-        endRange.setHours(23,59,59,999);
-      }
-      const result = [];
-      // Iterate days in range and match schedule_day
-      const duration = Number(groupDurationMin) > 0 ? Number(groupDurationMin) : 60;
-      for (const g of groupsToUse) {
-        const dayIdx = Number(g.schedule_day); // 0-6
-        const [hh, mm] = String(g.schedule_time).split(':').map(n => Number(n));
-        const cursor = new Date(startRange);
-        while (cursor <= endRange) {
-          if (cursor.getDay() === dayIdx) {
-            const start = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate(), hh || 0, mm || 0);
-            const end = new Date(start.getTime() + duration * 60 * 1000);
-            result.push({
-              id: `group-${g.id}-${start.toISOString()}`,
-              title: `${format(start, 'HH:mm')} - ${g.name}`,
-              start,
-              end,
-              allDay: false,
-              resource: {
-                status: 'accepted',
-                price: g.price != null ? Number(g.price) : 0,
-                duration,
-                userEmail: '',
-                userName: '',
-                serviceName: `Група: ${g.name}`
-              }
-            });
-          }
-          cursor.setDate(cursor.getDate() + 1);
-        }
-      }
-      setGroupEvents(result);
-    };
-    makeGroupEvents();
-  }, [useGroupSessions, selectedGroupId, groupDurationMin, allGroups, date, view]);
-
+  // schedule feature removed: availability range effect deleted
   if (loading) {
     return (
       <div className="premium-calendar">
@@ -869,27 +789,7 @@ const Calendar = ({ businessId, refreshTrigger }) => {
             </button>
           </div>
         </div>
-        <div className="mt-3 p-3 border rounded-xl bg-white flex flex-wrap gap-3 items-end">
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={useGroupSessions} onChange={e => setUseGroupSessions(e.target.checked)} />
-            <span>{t('calendar.useGroups', 'Вклучи термини од групи')}</span>
-          </label>
-          {useGroupSessions && (
-            <>
-              <div>
-                <label className="block text-xs text-gray-600 mb-1">{t('tablet.group','Група')}</label>
-                <select className="clean-select" value={selectedGroupId} onChange={e => setSelectedGroupId(e.target.value)}>
-                  <option value="">{t('attendance.allGroups','Сите групи')}</option>
-                  {allGroups.map(g => <option key={g.id} value={g.id}>{g.name}{g.hall ? ` — ${g.hall}` : ''}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs text-gray-600 mb-1">{t('calendar.duration','Траење (мин)')}</label>
-                <input type="number" min="1" className="clean-select" value={groupDurationMin} onChange={e => setGroupDurationMin(e.target.value)} />
-              </div>
-            </>
-          )}
-        </div>
+        {/* schedule controls removed */}
 
           {events.length === 0 ? (
             <div className="premium-calendar-empty">
@@ -908,7 +808,7 @@ const Calendar = ({ businessId, refreshTrigger }) => {
             <div className="clean-calendar" style={{ height: 600 }}>
               <BigCalendar
                 localizer={localizer}
-                events={[...events, ...groupEvents]}
+                events={events}
                 startAccessor="start"
                 endAccessor="end"
                 view={view}
@@ -922,7 +822,7 @@ const Calendar = ({ businessId, refreshTrigger }) => {
                 components={{
                   toolbar: CustomToolbar
                 }}
-                eventPropGetter={eventStyleGetter}
+                eventPropGetter={(event, start, end, isSelected) => eventStyleGetter(event, start, end, isSelected)}
               />
             </div>
           )}
