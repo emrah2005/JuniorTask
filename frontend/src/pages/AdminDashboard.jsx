@@ -52,6 +52,17 @@ const AdminDashboard = () => {
   const [sessionModal, setSessionModal] = useState({ open: false, session: null, applications: [], attendance: {} });
   const [calDate, setCalDate] = useState(new Date());
   const [calView, setCalView] = useState('month');
+  const [viewport, setViewport] = useState({ w: typeof window !== 'undefined' ? window.innerWidth : 1280, h: typeof window !== 'undefined' ? window.innerHeight : 800 });
+  useEffect(() => {
+    const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const calHeight = useMemo(() => {
+    if (viewport.w < 640) return Math.max(500, Math.floor(viewport.h * 0.6));
+    if (viewport.w < 1024) return Math.max(640, Math.floor(viewport.h * 0.68));
+    return Math.max(720, Math.floor(viewport.h * 0.75));
+  }, [viewport]);
   const CustomAgendaEvent = ({ event }) => (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
@@ -123,6 +134,24 @@ const AdminDashboard = () => {
     .rbc-agenda-view th, .rbc-agenda-view td {
       padding: 10px 12px;
       border-color: #eef2f7;
+    }
+    @media (max-width: 640px) {
+      .rbc-header {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      .rbc-date-cell {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      .rbc-event {
+        padding: 2px 6px !important;
+        font-size: 12px;
+      }
+      .rbc-agenda-view th, .rbc-agenda-view td {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
     }
   `;
 
@@ -510,17 +539,17 @@ const AdminDashboard = () => {
             <h2 className="text-xl font-semibold text-gray-900">Group Calendar</h2>
           </div>
           <div className="bg-gray-50 rounded-lg border border-gray-100 p-4 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2 flex-wrap">
                 <button className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50" onClick={() => setCalDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))} aria-label="Prev">
                   <svg className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none"><path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
-                <select className="bg-white border border-gray-200 rounded-lg px-3 py-1 text-sm font-semibold text-gray-800" value={calDate.getMonth()} onChange={(e) => setCalDate(new Date(calDate.getFullYear(), Number(e.target.value), 1))}>
+                <select className="bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs sm:text-sm font-semibold text-gray-800" value={calDate.getMonth()} onChange={(e) => setCalDate(new Date(calDate.getFullYear(), Number(e.target.value), 1))}>
                   {(useI18n().t('calendar.monthNames') || ['January','February','March','April','May','June','July','August','September','October','November','December']).map((m, idx) => (
                     <option key={m} value={idx}>{m}</option>
                   ))}
                 </select>
-                <select className="bg-white border border-gray-200 rounded-lg px-3 py-1 text-sm font-semibold text-gray-800" value={calDate.getFullYear()} onChange={(e) => setCalDate(new Date(Number(e.target.value), calDate.getMonth(), 1))}>
+                <select className="bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs sm:text-sm font-semibold text-gray-800" value={calDate.getFullYear()} onChange={(e) => setCalDate(new Date(Number(e.target.value), calDate.getMonth(), 1))}>
                   {Array.from({ length: 7 }, (_, i) => new Date().getFullYear() - 3 + i).map(y => (
                     <option key={y} value={y}>{y}</option>
                   ))}
@@ -532,7 +561,7 @@ const AdminDashboard = () => {
               <div className="flex items-center gap-2">
                 <div className="inline-flex border border-gray-200 rounded-lg overflow-hidden">
                   {['month','week','day','agenda'].map(v => (
-                    <button key={v} className={`px-3 py-1 text-sm font-semibold ${calView === v ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 hover:bg-gray-50'}`} onClick={() => setCalView(v)}>
+                    <button key={v} className={`px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold ${calView === v ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 hover:bg-gray-50'}`} onClick={() => setCalView(v)}>
                       {v.charAt(0).toUpperCase() + v.slice(1)}
                     </button>
                   ))}
@@ -549,7 +578,7 @@ const AdminDashboard = () => {
               onView={v => setCalView(v)}
               date={calDate}
               onNavigate={(d) => setCalDate(d)}
-              style={{ height: 860 }}
+              style={{ height: calHeight }}
               onSelectEvent={openSessionModal}
               components={{ toolbar: () => null, event: CustomEvent, agenda: { event: CustomAgendaEvent } }}
               eventPropGetter={() => ({
