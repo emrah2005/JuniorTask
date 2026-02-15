@@ -58,6 +58,11 @@ const AdminDashboard = () => {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+  useEffect(() => {
+    if (viewport.w < 640 && calView === 'month') {
+      setCalView('agenda');
+    }
+  }, [viewport.w]);
   const calHeight = useMemo(() => {
     if (viewport.w < 640) return Math.max(500, Math.floor(viewport.h * 0.6));
     if (viewport.w < 1024) return Math.max(640, Math.floor(viewport.h * 0.68));

@@ -10,6 +10,7 @@ const ServicesManager = ({ businessId }) => {
   const [newService, setNewService] = useState({ name: '', price: '', duration: '30' });
   const [editing, setEditing] = useState(null);
   const [editData, setEditData] = useState({ name: '', price: '', duration: '30' });
+  const [viewport, setViewport] = useState({ w: typeof window !== 'undefined' ? window.innerWidth : 1280 });
 
   const load = async () => {
     if (!businessId) {
@@ -31,6 +32,11 @@ const ServicesManager = ({ businessId }) => {
   useEffect(() => {
     load();
   }, [businessId]);
+  useEffect(() => {
+    const onResize = () => setViewport({ w: window.innerWidth });
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const addService = async (e) => {
     e.preventDefault();
@@ -126,74 +132,106 @@ const ServicesManager = ({ businessId }) => {
             </div>
           </form>
 
-          <div className="overflow-x-auto -mx-2 sm:mx-0">
-            <table className="min-w-full text-sm">
-              <thead>
-                <tr className="text-left border-b">
-                  <th className="p-2">ID</th>
-                  <th className="p-2">{t('admin.serviceName', 'Name')}</th>
-                  <th className="p-2 text-right">{t('admin.price', 'Price')}</th>
-                  <th className="p-2 text-right">{t('admin.duration', 'Duration')}</th>
-                  <th className="p-2">{t('common.actions', 'Actions')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading && (
-                  <tr><td className="p-2 text-gray-500" colSpan="5">{t('common.loading', 'Loading...')}</td></tr>
-                )}
-                {!loading && services.length === 0 && (
-                  <tr><td className="p-2 text-gray-500" colSpan="5">{t('admin.servicesManager.empty', 'No services')}</td></tr>
-                )}
-                {!loading && services.map(svc => (
-                  <tr key={svc.id} className="border-b">
-                    <td className="p-2">{svc.id}</td>
-                    <td className="p-2">
-                      {editing === svc.id ? (
-                        <input
-                          className="border rounded-lg px-2 py-1 w-full"
-                          value={editData.name}
-                          onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                        />
-                      ) : svc.name}
-                    </td>
-                    <td className="p-2 text-right">
-                      {editing === svc.id ? (
-                        <input
-                          type="number"
-                          className="border rounded-lg px-2 py-1 w-full"
-                          value={editData.price}
-                          onChange={(e) => setEditData({ ...editData, price: e.target.value })}
-                        />
-                      ) : svc.price}
-                    </td>
-                    <td className="p-2 text-right">
-                      {editing === svc.id ? (
-                        <input
-                          type="number"
-                          className="border rounded-lg px-2 py-1 w-full"
-                          value={editData.duration}
-                          onChange={(e) => setEditData({ ...editData, duration: e.target.value })}
-                        />
-                      ) : `${svc.duration} min`}
-                    </td>
-                    <td className="p-2">
-                      {editing === svc.id ? (
-                        <div className="flex gap-2">
-                          <button onClick={() => saveEdit(svc.id)} className="px-3 py-1 bg-blue-600 text-white rounded-lg">{t('common.save', 'Save')}</button>
-                          <button onClick={cancelEdit} className="px-3 py-1 border rounded-lg">{t('common.cancel', 'Cancel')}</button>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2">
-                          <button onClick={() => startEdit(svc)} className="px-3 py-1 border rounded-lg">{t('common.edit', 'Edit')}</button>
-                          <button onClick={() => removeService(svc.id)} className="px-3 py-1 bg-red-600 text-white rounded-lg">{t('common.delete', 'Delete')}</button>
-                        </div>
-                      )}
-                    </td>
+          {viewport.w < 640 ? (
+            <div className="space-y-3">
+              {loading && <div className="p-2 text-gray-500">{t('common.loading', 'Loading...')}</div>}
+              {!loading && services.length === 0 && (
+                <div className="p-2 text-gray-500">{t('admin.servicesManager.empty', 'No services')}</div>
+              )}
+              {!loading && services.map(svc => (
+                <div key={svc.id} className="border rounded-lg p-3 flex items-center justify-between">
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-900 truncate">{svc.name}</p>
+                    <p className="text-xs text-gray-600">{t('admin.duration','Duration')} {svc.duration} min • {t('admin.price','Price')} {svc.price}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => startEdit(svc)} className="px-2 py-1 border rounded-lg">{t('common.edit','Edit')}</button>
+                    <button onClick={() => removeService(svc.id)} className="px-2 py-1 bg-red-600 text-white rounded-lg">{t('common.delete','Delete')}</button>
+                  </div>
+                </div>
+              ))}
+              {editing && (
+                <div className="border rounded-lg p-3 space-y-2">
+                  <input className="border rounded-lg px-2 py-1 w-full" value={editData.name} onChange={(e) => setEditData({ ...editData, name: e.target.value })} />
+                  <input type="number" className="border rounded-lg px-2 py-1 w-full" value={editData.price} onChange={(e) => setEditData({ ...editData, price: e.target.value })} />
+                  <input type="number" className="border rounded-lg px-2 py-1 w-full" value={editData.duration} onChange={(e) => setEditData({ ...editData, duration: e.target.value })} />
+                  <div className="flex gap-2">
+                    <button onClick={() => saveEdit(editing)} className="px-3 py-1 bg-blue-600 text-white rounded-lg">{t('common.save','Save')}</button>
+                    <button onClick={cancelEdit} className="px-3 py-1 border rounded-lg">{t('common.cancel','Cancel')}</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="overflow-x-auto -mx-2 sm:mx-0">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="text-left border-b">
+                    <th className="p-2">ID</th>
+                    <th className="p-2">{t('admin.serviceName', 'Name')}</th>
+                    <th className="p-2 text-right">{t('admin.price', 'Price')}</th>
+                    <th className="p-2 text-right">{t('admin.duration', 'Duration')}</th>
+                    <th className="p-2">{t('common.actions', 'Actions')}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {loading && (
+                    <tr><td className="p-2 text-gray-500" colSpan="5">{t('common.loading', 'Loading...')}</td></tr>
+                  )}
+                  {!loading && services.length === 0 && (
+                    <tr><td className="p-2 text-gray-500" colSpan="5">{t('admin.servicesManager.empty', 'No services')}</td></tr>
+                  )}
+                  {!loading && services.map(svc => (
+                    <tr key={svc.id} className="border-b">
+                      <td className="p-2">{svc.id}</td>
+                      <td className="p-2">
+                        {editing === svc.id ? (
+                          <input
+                            className="border rounded-lg px-2 py-1 w-full"
+                            value={editData.name}
+                            onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                          />
+                        ) : svc.name}
+                      </td>
+                      <td className="p-2 text-right">
+                        {editing === svc.id ? (
+                          <input
+                            type="number"
+                            className="border rounded-lg px-2 py-1 w-full"
+                            value={editData.price}
+                            onChange={(e) => setEditData({ ...editData, price: e.target.value })}
+                          />
+                        ) : svc.price}
+                      </td>
+                      <td className="p-2 text-right">
+                        {editing === svc.id ? (
+                          <input
+                            type="number"
+                            className="border rounded-lg px-2 py-1 w-full"
+                            value={editData.duration}
+                            onChange={(e) => setEditData({ ...editData, duration: e.target.value })}
+                          />
+                        ) : `${svc.duration} min`}
+                      </td>
+                      <td className="p-2">
+                        {editing === svc.id ? (
+                          <div className="flex gap-2">
+                            <button onClick={() => saveEdit(svc.id)} className="px-3 py-1 bg-blue-600 text-white rounded-lg">{t('common.save', 'Save')}</button>
+                            <button onClick={cancelEdit} className="px-3 py-1 border rounded-lg">{t('common.cancel', 'Cancel')}</button>
+                          </div>
+                        ) : (
+                          <div className="flex gap-2">
+                            <button onClick={() => startEdit(svc)} className="px-3 py-1 border rounded-lg">{t('common.edit', 'Edit')}</button>
+                            <button onClick={() => removeService(svc.id)} className="px-3 py-1 bg-red-600 text-white rounded-lg">{t('common.delete', 'Delete')}</button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </>
       )}
     </div>
