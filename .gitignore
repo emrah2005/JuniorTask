@@ -8,3 +8,4 @@ npm-debug.log*
 dist/
 coverage/
 frontend/public/video.mp4
+db-data/

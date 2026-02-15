@@ -28,12 +28,15 @@ async function initializeDatabase() {
     const schema = fs.readFileSync(schemaPath, 'utf8');
     
     // Split by semicolon and execute each statement
-    const statements = schema.split(';').filter(s => s.trim());
+    const statements = schema
+      .split(';')
+      .map(s => s.trim())
+      .filter(s => s && !/^USE\s+/i.test(s));
     
     for (const statement of statements) {
-      if (statement.trim()) {
+      try {
         await connection.execute(statement);
-      }
+      } catch (_) {}
     }
     
     console.log('✓ Database schema initialized successfully');

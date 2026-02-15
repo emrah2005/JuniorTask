@@ -6,10 +6,13 @@ CREATE TABLE users (
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
+  date_of_birth DATE NULL,
   role ENUM('SuperAdmin', 'Admin', 'User') DEFAULT 'User',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+-- Ensure date_of_birth exists for existing databases
+ALTER TABLE users ADD COLUMN IF NOT EXISTS date_of_birth DATE NULL AFTER password;
 
 CREATE TABLE businesses (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,6 +54,8 @@ CREATE TABLE bookings (
 CREATE TABLE IF NOT EXISTS groups (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
+  business_id INT NULL,
+  description TEXT NULL,
   hall VARCHAR(255) NULL,
   trainer_id INT NOT NULL,
   schedule_day TINYINT NULL COMMENT '0=Sun..6=Sat',
@@ -60,6 +65,9 @@ CREATE TABLE IF NOT EXISTS groups (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (trainer_id) REFERENCES users(id) ON DELETE CASCADE
 );
+-- Ensure columns exist for existing databases
+ALTER TABLE groups ADD COLUMN IF NOT EXISTS business_id INT NULL AFTER name;
+ALTER TABLE groups ADD COLUMN IF NOT EXISTS description TEXT NULL AFTER business_id;
 
 -- Memberships linking users to groups with validity
 CREATE TABLE IF NOT EXISTS memberships (
@@ -93,3 +101,32 @@ CREATE TABLE IF NOT EXISTS attendance (
 
 INSERT INTO users (name, email, password, role) VALUES 
 ('Super Admin', 'admin@booking.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'SuperAdmin');
+
+-- Group session bookings (reservation layer before attendance)
+CREATE TABLE IF NOT EXISTS group_bookings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  group_id INT NOT NULL,
+  session_datetime DATETIME NOT NULL,
+  status ENUM('pending','confirmed','cancelled') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
+  UNIQUE KEY uniq_group_booking (user_id, group_id, session_datetime)
+);
+
+-- Coach-scheduled sessions (slot creation independent of bookings)
+CREATE TABLE IF NOT EXISTS group_sessions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  group_id INT NOT NULL,
+  session_datetime DATETIME NOT NULL,
+  capacity INT NOT NULL DEFAULT 20,
+  created_by INT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
+  FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
+  UNIQUE KEY uniq_group_session (group_id, session_datetime)
+);
+
+-- Add capacity column if missing
+ALTER TABLE group_sessions ADD COLUMN IF NOT EXISTS capacity INT NOT NULL DEFAULT 20;

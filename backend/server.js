@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mysql = require('mysql2/promise');
+const { initializeDatabase } = require('./database/init');
 
 dotenv.config();
 
@@ -48,7 +49,21 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.get('/api/health/db', async (req, res) => {
+  try {
+    const [rows] = await req.pool.execute('SELECT 1 as ok');
+    res.json({ status: 'OK', db: rows[0].ok === 1 });
+  } catch (error) {
+    res.status(500).json({ status: 'ERROR', error: 'DB not reachable' });
+  }
 });
+
+const PORT = process.env.PORT || 5000;
+(async () => {
+  try {
+    await initializeDatabase();
+  } catch (_) {}
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+})();

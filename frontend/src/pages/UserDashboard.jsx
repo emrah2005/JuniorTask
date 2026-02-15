@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Calendar, Clock, DollarSign, MapPin, X, Search } from 'lucide-react';
 import { useI18n } from '../contexts/I18nContext';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const UserDashboard = () => {
   const { t } = useI18n();
@@ -16,10 +17,13 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const presetTimes = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];
   const [busyHours, setBusyHours] = useState([]);
+  const [groupSessions, setGroupSessions] = useState([]);
+  const [applications, setApplications] = useState({});
 
   useEffect(() => {
     fetchBusinesses();
     fetchMyBookings();
+    fetchGroupSessions();
   }, []);
 
   useEffect(() => {
@@ -73,6 +77,16 @@ const UserDashboard = () => {
     }
   };
 
+  const fetchGroupSessions = async () => {
+    try {
+      const resp = await axios.get('/api/groups/available/public');
+      const rows = Array.isArray(resp.data) ? resp.data : [];
+      setGroupSessions(rows);
+    } catch (e) {
+      console.error('Error fetching group sessions', e);
+    }
+  };
+
   const handleCreateBooking = async (e) => {
     e.preventDefault();
     
@@ -94,6 +108,17 @@ const UserDashboard = () => {
     } catch (error) {
       console.error('Error creating booking:', error);
       alert(error.response?.data?.error || 'Failed to create booking');
+    }
+  };
+
+  const handleApplySession = async (session) => {
+    if (applications[session.session_id]) return;
+    try {
+      const res = await axios.post('/api/groups/apply', { session_id: session.session_id });
+      setApplications(prev => ({ ...prev, [session.session_id]: res.data?.application?.status || 'pending' }));
+      await fetchGroupSessions();
+    } catch (e) {
+      alert(e.response?.data?.error || 'Failed to apply');
     }
   };
 
@@ -237,6 +262,54 @@ const UserDashboard = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Available Group Sessions */}
+        <div>
+          <div className="bg-white rounded-lg shadow p-6 sm:p-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Available Group Sessions</h2>
+              <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700">{groupSessions.length} upcoming</span>
+            </div>
+            {groupSessions.length === 0 ? (
+              <p className="text-gray-500">No upcoming sessions</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {groupSessions.map(s => {
+                  const used = Number(s.used || 0);
+                  const free = Math.max(0, Number(s.capacity) - used);
+                  const status = applications[s.session_id];
+                  return (
+                    <div key={s.session_id} className="border rounded-xl p-4 hover:shadow-md transition bg-gray-50">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-semibold text-gray-900">{s.group_name}</h3>
+                            <span className="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">{used}/{s.capacity}</span>
+                          </div>
+                          <p className="text-sm text-gray-600">Trainer: {s.trainer_name}</p>
+                          <div className="flex items-center text-sm text-gray-500">
+                            <Calendar className="w-4 h-4 mr-1" />
+                            {new Date(s.session_datetime).toLocaleString()}
+                          </div>
+                          <p className="text-sm text-gray-600">Free spots: {free}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleApplySession(s)}
+                            disabled={!!status || free <= 0}
+                            className={`px-3 py-2 rounded-lg text-white ${status ? 'bg-gray-400' : (free > 0 ? 'bg-primary-600 hover:bg-primary-700' : 'bg-gray-400')} `}
+                          >
+                            {status ? status : 'Apply'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
