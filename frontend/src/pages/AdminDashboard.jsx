@@ -517,12 +517,12 @@ const AdminDashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="mb-6 flex justify-between items-center flex-wrap gap-3">
-        <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-        <div className="flex items-center gap-2 flex-wrap">
+      <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="w-full sm:w-auto flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
           >
             <Plus className="w-5 h-5 mr-2" />
             Add Business
@@ -531,14 +531,14 @@ const AdminDashboard = () => {
       </div>
 
       <div className="mb-8">
-        <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
               <CalendarIcon className="w-5 h-5" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">Group Calendar</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Group Calendar</h2>
           </div>
-          <div className="bg-gray-50 rounded-lg border border-gray-100 p-4 shadow-sm">
+          <div className="bg-gray-50 rounded-lg border border-gray-100 p-3 sm:p-4 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2 flex-wrap">
                 <button className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50" onClick={() => setCalDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))} aria-label="Prev">
@@ -785,7 +785,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Create Group */}
               <form onSubmit={handleCreateGroup} className="space-y-3 bg-gray-50 border border-gray-100 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
@@ -827,7 +827,7 @@ const AdminDashboard = () => {
                   className="w-full border rounded-lg px-3 py-2"
                   rows={3}
                 />
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Create Group</button>
+                <button type="submit" className="w-full md:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Create Group</button>
               </form>
 
               {/* Create Session */}
@@ -872,7 +872,7 @@ const AdminDashboard = () => {
                   placeholder="Capacity"
                   required
                 />
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Create Session</button>
+                <button type="submit" className="w-full md:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Create Session</button>
               </form>
 
               
@@ -899,44 +899,71 @@ const AdminDashboard = () => {
                   </span>
                   <span className="text-gray-500 text-sm">{new Date(sessionModal.session?.session_datetime).toLocaleString()}</span>
                 </div>
-                <table className="min-w-full text-sm">
-                  <thead>
-                    <tr className="text-left border-b">
-                      <th className="p-2">User</th>
-                      <th className="p-2">Status</th>
-                      <th className="p-2">Actions</th>
-                      <th className="p-2">Attendance</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                {viewport.w < 640 ? (
+                  <div className="space-y-3">
                     {sessionModal.applications.map(app => (
-                      <tr key={app.id} className="border-b hover:bg-gray-50">
-                        <td className="p-2">{app.user_name}</td>
-                        <td className="p-2">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
+                      <div key={app.id} className="border rounded-lg p-3 flex items-center justify-between">
+                        <div className="min-w-0">
+                          <p className="font-medium text-gray-900 truncate">{app.user_name}</p>
+                          <span className={`mt-1 inline-block px-2 py-1 rounded-full text-xs font-medium capitalize ${
                             app.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                             app.status === 'confirmed' ? 'bg-green-100 text-green-800' :
                             'bg-red-100 text-red-800'
-                          }`}>
-                            {app.status}
-                          </span>
-                        </td>
-                        <td className="p-2 space-x-2">
+                          }`}>{app.status}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
                           <button onClick={() => handleApprove(app.id, 'approve')} className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
                           <button onClick={() => handleApprove(app.id, 'reject')} className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">Reject</button>
-                        </td>
-                        <td className="p-2">
                           <input 
                             type="checkbox" 
                             checked={!!sessionModal.attendance[app.user_id]} 
                             disabled={app.status !== 'confirmed'}
                             onChange={e => handleAttendance(app.id, e.target.checked, app.user_id)} 
                           />
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                ) : (
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="text-left border-b">
+                        <th className="p-2">User</th>
+                        <th className="p-2">Status</th>
+                        <th className="p-2">Actions</th>
+                        <th className="p-2">Attendance</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sessionModal.applications.map(app => (
+                        <tr key={app.id} className="border-b hover:bg-gray-50">
+                          <td className="p-2">{app.user_name}</td>
+                          <td className="p-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
+                              app.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              app.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {app.status}
+                            </span>
+                          </td>
+                          <td className="p-2 space-x-2">
+                            <button onClick={() => handleApprove(app.id, 'approve')} className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>
+                            <button onClick={() => handleApprove(app.id, 'reject')} className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700">Reject</button>
+                          </td>
+                          <td className="p-2">
+                            <input 
+                              type="checkbox" 
+                              checked={!!sessionModal.attendance[app.user_id]} 
+                              disabled={app.status !== 'confirmed'}
+                              onChange={e => handleAttendance(app.id, e.target.checked, app.user_id)} 
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           </div>
